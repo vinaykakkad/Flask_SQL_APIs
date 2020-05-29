@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+    <head>
+        <meta charset="utf-8">
+        <title>BOOK REVs</title>
+
+        <link rel="stylesheet" href="{{url_for('static', filename='../static/libs/bootstrap.min.css')}}">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://use.fontawesome.com/3b82621a91.css">
+        <script type="text/javascript" src="{{url_for('static', filename='../static/libs/jquery.min.js')}}"></script>
+        <script type="text/javascript" src="{{url_for('static', filename='../static/libs/bootstrap.min.js')}}"></script>
+        <script type="text/javascript" src="{{url_for('static', filename='../static/libs/bootstrap.bundle.min.js')}}"></script>
+        <style media="screen">
+            body
+            {
+                background-color: dodgerblue;
+            }
+
+
+            @media screen and (min-width: 601px)
+            {
+                .login_box
+                {
+                    width: 540px;
+                }
+            }
+            @media screen and (max-width: 600px)
+            {
+                .login_box
+                {
+                    width: 280px;
+                }
+                h3
+                {
+                    font-size: 22px;
+                }
+                h5
+                {
+                    font-size: 18px;
+                }
+            }
+            .login_box
+            {
+                background-color: white;
+                border-radius: 10px;
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                -ms-transform: translate(-50%, -50%);
+                transform: translate(-50%, -50%);
+            }
+            input[type=text], input[type=password]
+            {
+                width: 100%;
+                padding: 12px 20px;
+                margin: 8px 0;
+                display: inline-block;
+                border: 1px solid #ccc;
+                box-sizing: border-box;
+            }
+            button
+            {
+                background-color: dodgerblue;
+                color: white;
+                padding: 14px 20px;
+                margin: 8px 0;
+                border-color: dodgerblue;
+                border-radius: 5px;
+                cursor: pointer;
+                width: 100%;
+            }
+
+            button:hover
+            {
+                opacity: 0.8;
+            }
+        </style>
+    </head>
+    <body>
+        {% if msg is defined and msg|length %}
+            <div class="alert alert-danger">
+                <strong>{{msg}}</strong>
+            </div>
+        {% endif %}
+
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                {% for message in messages %}
+                    {% if message=="You must be logged in to view that page."%}
+                        <div class="alert alert-danger">
+                            <strong>{{message}}</strong>
+                        </div>
+                    {% else %}
+                        <div class="alert alert-success">
+                            <strong>{{message}}</strong>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <!-- LOGIN BOX -->
+        <div class="container login_box p-0">
+            <form action="{{url_for('login')}}" method="post">
+                <div class="container" style="text-align:center; color:dodgerblue; padding:16px;">
+                    <h3>Log in to your account</h3>
+                </div>
+                <div class="container pb-0">
+                    <label for="username"><b>Username</b></label>
+                    <input type="text" placeholder="Enter Username" name="username" autocomplete="off" required>
+                    <label for="password"><b>Password</b></label>
+                    <input type="password" placeholder="Enter Password" name="password" autocomplete="off" required>
+                    <button type="submit">Login</button>
+                </div>
+                <hr>
+                <div class="container pt-0 pb-2" style="background-color:transparent; text-align:center">
+                    <h5>New User?? <a href="{{url_for('signup')}}">Sign up</a></h5>
+                </div>
+            </form>
+        </div>
+    </body>
+</html>

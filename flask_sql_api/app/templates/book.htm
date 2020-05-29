@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+    <head>
+        <meta charset="utf-8">
+        <title>BOOK REVs</title>
+        <link rel="stylesheet" href="{{url_for('static', filename='../static/libs/bootstrap.min.css')}}">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <script src="https://use.fontawesome.com/a69f60b75d.js"></script>
+        <script type="text/javascript" src="{{url_for('static', filename='../static/libs/jquery.min.js')}}"></script>
+        <script type="text/javascript" src="{{url_for('static', filename='../static/libs/bootstrap.min.js')}}"></script>
+        <script type="text/javascript" src="{{url_for('static', filename='../static/libs/bootstrap.bundle.min.js')}}"></script>
+        <style media="screen">
+            .my_nav
+            {
+                background-color: dodgerblue;
+            }
+            .dropdown_buttons
+            {
+                background:transparent;
+                border:none;
+            }
+            .modal_inputs
+            {
+                width:100%;
+                height:30px;
+            }
+            .books_div
+            {
+                min-width:80vw;
+                margin-top: 50px;
+                border-radius:5px;
+                border:2px solid grey;
+                background: rgb(213, 209, 209);
+            }
+            .books
+            {
+                display: flex;
+                align-items: center;
+            }
+            .max
+            {
+                max-width: 100%;
+            }
+            @media screen and (min-width: 601px)
+            {
+                .book_icon
+                {
+                    margin-left: 5px;
+                    margin-right: 0;
+                    font-size: 120px;
+                }
+                .pad
+                {
+                    padding-left: 40px;
+                }
+            }
+            @media screen and (max-width: 600px)
+            {
+                .book_icon
+                {
+                    font-size: 60px;
+                }
+                .pad
+                {
+                    padding-left: 20px;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <!-- NAVBAR -->
+        <nav class="navbar navbar-expand-md my_nav">
+            <!-- LOGO -->
+            <a class="navbar-brand text-white" href="{{url_for('dashboard')}}"><h3><i class="fa fa-book"></i>   Book Revs</h3></a>
+            <!-- DROPDOWN -->
+            <ul class="navbar-nav mr-0 ml-auto">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle text-white" href="#" id="navbardrop" data-toggle="dropdown">
+                        Hi, {{current_user}}
+                    </a>
+                    <div class="dropdown-menu">
+                        <a class="dropdown-item">
+                            <button type="button" name="button" class="dropdown_buttons" data-toggle="modal" data-target="#myModal">Search</button></a>
+                        <a class="dropdown-item" href="{{url_for('logout')}}">
+                            <button type="button" name="button" class="dropdown_buttons">Logout</button>
+                        </a>
+                    </div>
+                </li>
+            </ul>
+        </nav>
+
+        <div class="modal fade" id="myModal">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <form class="" action="{{url_for('dashboard')}}" method="post">
+                        <!-- Modal Header -->
+                        <div class="modal-header" style="background-color:dodgerblue">
+                            <h4 class="modal-title text-white">Search books</h4>
+                            <button type="button" class="close text-white" data-dismiss="modal">&times;</button>
+                        </div>
+                        <!-- Modal body -->
+                        <div class="modal-body">
+                            <label for="option">Search by:</label><br>
+                            <select name="option" class="modal_inputs" required>
+                                <option value="isbn">ISBN</option>
+                                <option value="author">Author</option>
+                                <option value="title">Title</option>
+                            </select>
+                            <br><br>
+                            <input type="text" name="value" placeholder="Author/Title/ISBN" autocomplete="off" class="modal_inputs" required>
+                        </div>
+                        <!-- Modal footer -->
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-white">Search</button>
+                            <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="container p-0 books_div">
+            <div class="row max mr-0">
+                <div class="col-3 m-2">
+                    <i class="fa fa-book book_icon"></i>
+                </div>
+                <div class="col-8 books">
+                    <div class="row">
+                        <div class="col-12 p-2">
+                            <b>Title:</b> {{book.title}}<br>
+                            <b>Author:</b> {{book.author}}<br>
+                            <b>ISBN:</b> {{book.isbn}}<br>
+                            {% if count %}
+                                <b>Goodreads rating:</b> {{count}} ratings<br>
+                                <b>Goodreads average:</b> {{average}}
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <br>
+            <div class="row max mr-0">
+                <div class="col m-0 pr-0 max">
+                    <h5 class="p-2">BOOK REVs reviews:</h5>
+                    <hr>
+                    <div class="pad m-0 max">
+                        <b>Ratings:</b> {{book.get_number()}} ratings <br>
+                        <b>Average:</b> {{book.get_avg()}} <br><br>
+                        {% if book.get_revs()|length %}
+                            <h5>Reviews:</h5>
+                            <hr>
+                            {% for i in book.get_revs() %}
+                                {% if i.review != None %}
+                                    <b><i class="fa fa-user"></i>  {{i.username}},</b>
+                                    <div class="pad py-3">
+                                        {{i.review}}
+                                    </div>
+                                    <br>
+                                {% endif %}
+                            {% endfor %}
+                        {% endif %}
+                        <hr>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row p-3 max">
+                <button type="button" name="button" class="btn btn-primary mx-auto" data-toggle="modal" data-target="#reviewModal">Post review</button></a>
+            </div>
+            <div class="modal fade" id="reviewModal">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <form class="" action="{{url_for('post', isbn=book.isbn, user=current_user)}}" method="post">
+                            <!-- Modal Header -->
+                            <div class="modal-header" style="background-color:dodgerblue">
+                                <h4 class="modal-title text-white">Post review</h4>
+                                <button type="button" class="close text-white" data-dismiss="modal">&times;</button>
+                            </div>
+                            <!-- Modal body -->
+                            <div class="modal-body">
+                                <label for="rating">Give Rating:</label><br>
+                                <select name="rating" class="modal_inputs" required>
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+                                    <option value="5">5</option>
+                                </select>
+                                <br><br>
+                                <label for="review">Your Review</label><br>
+                                <textarea name="review" placeholder="Your review" autocomplete="off" style="height:20vh; width:100%" required></textarea>
+                            </div>
+                            <!-- Modal footer -->
+                            <div class="modal-footer">
+                                <button type="submit" class="btn btn-white">Post</button>
+                                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+    </body>
+</html>

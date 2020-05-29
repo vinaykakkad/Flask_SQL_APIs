@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+    <head>
+        <meta charset="utf-8">
+        <title>BOOK REVs</title>
+        <link rel="stylesheet" href="{{url_for('static', filename='../static/libs/bootstrap.min.css')}}">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://use.fontawesome.com/3b82621a91.css">
+        <script type="text/javascript" src="{{url_for('static', filename='../static/libs/jquery.min.js')}}"></script>
+        <script type="text/javascript" src="{{url_for('static', filename='../static/libs/bootstrap.min.js')}}"></script>
+        <script type="text/javascript" src="{{url_for('static', filename='../static/libs/bootstrap.bundle.min.js')}}"></script>
+        <style media="screen">
+            .my_nav
+            {
+                background-color: dodgerblue;
+            }
+            .dropdown_buttons
+            {
+                background:transparent;
+                border:none;
+            }
+            .modal_inputs
+            {
+                width:100%;
+                height:30px;
+            }
+            .books_div
+            {
+                min-width:80vw;
+                border-radius:5px;
+                border:2px solid grey;
+                background: rgb(213, 209, 209);
+            }
+            .books
+            {
+                display: flex;
+                align-items: center;
+            }
+            @media screen and (min-width: 601px)
+            {
+                .book_icon
+                {
+                    margin-left: 5px;
+                    margin-right: 0;
+                    font-size: 120px;
+                }
+            }
+            @media screen and (max-width: 600px)
+            {
+                .book_icon
+                {
+                    font-size: 60px;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                {% for message in messages %}
+                {% if message == "You have already submiited your review" %}
+                    <div class="alert alert-danger">
+                        <strong>Error!</strong> {{message}}
+                    </div>
+                {%else%}
+                    <div class="alert alert-success">
+                        <strong>Success!</strong> {{message}}
+                    </div>
+                {% endif %}
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <!-- NAVBAR -->
+        <nav class="navbar navbar-expand-md my_nav">
+            <!-- LOGO -->
+            <a class="navbar-brand text-white" href="{{url_for('dashboard')}}"><h3><i class="fa fa-book"></i>   Book Revs</h3></a>
+
+            <!-- DROPDOWN -->
+            <ul class="navbar-nav mr-0 ml-auto">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle text-white" href="#" id="navbardrop" data-toggle="dropdown">
+                        Hi, <b>{{current_user}}</b>
+                    </a>
+                    <div class="dropdown-menu">
+                        <a class="dropdown-item">
+                            <button type="button" name="button" class="dropdown_buttons" data-toggle="modal" data-target="#myModal">Search</button></a>
+                        <a class="dropdown-item" href="{{url_for('logout')}}">
+                            <button type="button" name="button" class="dropdown_buttons">Logout</button>
+                        </a>
+                    </div>
+                </li>
+            </ul>
+        </nav>
+
+        <div class="modal fade" id="myModal">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <form class="" action="{{url_for('dashboard')}}" method="post">
+                        <!-- Modal Header -->
+                        <div class="modal-header" style="background-color:dodgerblue">
+                            <h4 class="modal-title text-white">Search books</h4>
+                            <button type="button" class="close text-white" data-dismiss="modal">&times;</button>
+                        </div>
+                        <!-- Modal body -->
+                        <div class="modal-body">
+                            <label for="option">Search by:</label><br>
+                            <select name="option" class="modal_inputs" required>
+                                <option value="isbn">ISBN</option>
+                                <option value="author">Author</option>
+                                <option value="title">Title</option>
+                            </select>
+                            <br><br>
+                            <input type="text" name="value" placeholder="Author/Title/ISBN" autocomplete="off" class="modal_inputs" required>
+                        </div>
+                        <!-- Modal footer -->
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-white">Search</button>
+                            <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="container mt-3">
+            <h3>{{msg}}</h3>
+        </div>
+
+        {% for i in books%}
+        <div class="container mt-4 books_div">
+            <div class="row pr-0">
+                <div class="col-3 book_icon">
+                    <i class="fa fa-book"></i>
+                </div>
+                <div class="col-8 mr-0 pr-0 books">
+                    <div class="row">
+                        <div class="col-12 mr-0">
+                            <b>Title:</b> {{i.title}}<br>
+                            <b>Author:</b> {{i.author}}<br>
+                        </div>
+                        <div class="col-12">
+                            <a href="{{url_for('books', code= i.isbn)}}">Read more</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {%endfor%}
+    </body>
+</html>
