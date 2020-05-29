@@ -17,7 +17,7 @@ A book reviews website were users can search for books, leave reviews and see th
   ```sh
   set FLASK_DEBUG=1
   set FLASK_ENV=development
-  ser FLASK_APP=run.py
+  set FLASK_APP=run.py
   python -m flask run
   ```
   - On moving to the provided url, you will be able to see the login page:
