@@ -11,7 +11,9 @@ A book reviews website were users can search for books, leave reviews and see th
   ```sh
   pip install -r requirements.txt
   ```
-  - Run the file using:
+  - In env.py file configure your secret key, database url and Goodreads API key. Database url follows the standard convention:
+  [DB_TYPE]+[DB_CONNECTOR]://[USERNAME]:[PASSWORD]@[HOST]:[PORT]/[DB_NAME]. You can get the Goodreads API key from [here](https://www.goodreads.com/api).
+  - Now, run the file using:
   ```sh
   set FLASK_DEBUG=1
   set FLASK_ENV=development
