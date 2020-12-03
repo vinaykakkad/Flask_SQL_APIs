@@ -1,6 +1,4 @@
-# cs50-projects
-
-## 1. FLASK_SQL_API
+# FLASK_SQL_API
 
 A book reviews website were users can search for books, leave reviews and see the reviews by others. Using Goodreads API, ratings of the books will also be displayed. Finally, users can query also query for book details and rating through website's API.
 
